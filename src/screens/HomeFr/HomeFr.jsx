@@ -1,11 +1,103 @@
-import "./style.css"
+import React, { useState, useEffect } from "react";
+import "./style.css";
 
 export const HomeFr = () => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [days, setDays] = useState([]);
+
+  useEffect(() => {
+    renderCalendar();
+  }, [currentDate]); // Runs when `currentDate` changes
+
+  const renderCalendar = () => {
+    const firstDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const lastDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    );
+    const lastDayIndex = lastDay.getDay();
+    const lastDayDate = lastDay.getDate();
+    const prevLastDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      0
+    );
+    const prevLastDayDate = prevLastDay.getDate();
+    const nextDays = 7 - lastDayIndex - 1;
+
+    let daysArray = [];
+
+    // Previous month days
+    for (let x = firstDay.getDay(); x > 0; x--) {
+      daysArray.push({ day: prevLastDayDate - x + 1, type: "prev" });
+    }
+
+    // Current month days
+    for (let i = 1; i <= lastDayDate; i++) {
+      let type = "";
+      if (
+        i === new Date().getDate() &&
+        currentDate.getMonth() === new Date().getMonth() &&
+        currentDate.getFullYear() === new Date().getFullYear()
+      ) {
+        type = "today";
+      }
+      daysArray.push({ day: i, type });
+    }
+
+    // Next month days
+    for (let j = 1; j <= nextDays; j++) {
+      daysArray.push({ day: j, type: "next" });
+    }
+
+    setDays(daysArray);
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+    );
+  };
+
+  const handlePrevMonth = () => {
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
+    );
+  };
+
+  const handleToday = () => {
+    setCurrentDate(new Date());
+  };
+
   return (
     <div className="HOME-FR">
       <div className="div">
         <div className="pg">
-          <img className="sidebar-pg" alt="Sidebar pg" src="https://c.animaapp.com/RvWIzz1c/img/sidebar-pg-2.svg" />
+          <img
+            className="sidebar-pg"
+            alt="Sidebar pg"
+            src="https://c.animaapp.com/RvWIzz1c/img/sidebar-pg-2.svg"
+          />
 
           <div className="recommendations">
             <div className="overlap-group">
@@ -80,8 +172,8 @@ export const HomeFr = () => {
               <div className="overlap">
                 <form
                   onSubmit={(e) => {
-                    e.preventDefault()
-                    alert("Search submitted!")
+                    e.preventDefault();
+                    alert("Search submitted!");
                   }}
                 >
                   <input
@@ -100,19 +192,30 @@ export const HomeFr = () => {
                   />
                   <button type="submit" style={{ display: "none" }}></button>
                 </form>
-               
               </div>
             </div>
 
             <div className="streak">
-              <img className="vector-2" alt="Vector" src="https://c.animaapp.com/RvWIzz1c/img/vector.svg" />
+              <img
+                className="vector-2"
+                alt="Vector"
+                src="https://c.animaapp.com/RvWIzz1c/img/vector.svg"
+              />
 
               <div className="text-wrapper-7">30</div>
             </div>
 
-            <img className="notif-icon" alt="Notif icon" src="https://c.animaapp.com/RvWIzz1c/img/notif-icon@2x.png" />
+            <img
+              className="notif-icon"
+              alt="Notif icon"
+              src="https://c.animaapp.com/RvWIzz1c/img/notif-icon@2x.png"
+            />
 
-            <img className="user-icon" alt="User icon" src="https://c.animaapp.com/RvWIzz1c/img/user-icon.svg" />
+            <img
+              className="user-icon"
+              alt="User icon"
+              src="https://c.animaapp.com/RvWIzz1c/img/user-icon.svg"
+            />
           </div>
 
           <div className="jump-back-in">
@@ -126,7 +229,10 @@ export const HomeFr = () => {
                   src="https://c.animaapp.com/RvWIzz1c/img/goods-and-promotions-flying-into-the-shopping-cart@2x.png"
                 />
 
-                <button className="continue-button" onClick={() => alert("Button clicked!")}>
+                <button
+                  className="continue-button"
+                  onClick={() => alert("Button clicked!")}
+                >
                   <div className="overlap-group-4">
                     <div className="creat-account" />
                     <div className="text-wrapper-8">Continue</div>
@@ -142,17 +248,65 @@ export const HomeFr = () => {
                 <div className="budgeting-taxation">Budgeting & taxation</div>
               </div>
 
-              <div className="jump-back-in-2">Jump&nbsp;&nbsp;Back&nbsp;&nbsp;in</div>
+              <div className="jump-back-in-2">
+                Jump&nbsp;&nbsp;Back&nbsp;&nbsp;in
+              </div>
             </div>
           </div>
-
-          <div className="calendar">
-            <div className="overlap-4">
-              <img className="line" alt="Line" src="https://c.animaapp.com/RvWIzz1c/img/line-1.svg" />
-              <div className="calendar-2" />
+          <div className="container">
+            <div className="calendar">
+              <div className="overlap-4">
+                <div className="calendar-2">
+                  <div className="header">
+                    <div className="month">
+                      {months[currentDate.getMonth()]}{" "}
+                      {currentDate.getFullYear()}
+                    </div>
+                    <div className="btn">
+                      <div className="btn today">
+                        <i className="fas fa-calendar-day"></i>
+                      </div>
+                      <div className="btn prev" onClick={handlePrevMonth}>
+                        <i className="fas fa-calender-day"></i>
+                      </div>
+                      <div className="btn today">
+                        <i className="fas fa-calendar-day"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="weekdays">
+                    <div class="day">Sun</div>
+                    <div class="day">Mon</div>
+                    <div class="day">Tue</div>
+                    <div class="day">Wed</div>
+                    <div class="day">Thu</div>
+                    <div class="day">Fri</div>
+                    <div class="day">Sat</div>
+                  </div>
+                  <div class="days">
+                    {days.map((item, index) => (
+                      <div key={index} className={`day ${item.type}`}>
+                        {item.day}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <button
+                className="today-btn"
+                onClick={handleToday}
+                style={{
+                  display:
+                    currentDate.getMonth() === new Date().getMonth() &&
+                    currentDate.getFullYear() === new Date().getFullYear()
+                      ? "none"
+                      : "flex",
+                }}
+              >
+                Today
+              </button>
             </div>
           </div>
-
           <div className="welcome-back">
             <div className="overlap-5">
               <div className="we">Welcome Bubbles!</div>
@@ -171,7 +325,11 @@ export const HomeFr = () => {
 
               <div className="text-wrapper-10">DAILY TIP</div>
 
-              <img className="clip" alt="Clip" src="https://c.animaapp.com/RvWIzz1c/img/clip.svg" />
+              <img
+                className="clip"
+                alt="Clip"
+                src="https://c.animaapp.com/RvWIzz1c/img/clip.svg"
+              />
 
               <img
                 className="adding-money-to"
@@ -190,7 +348,11 @@ export const HomeFr = () => {
               <div className="rectangle-5" />
 
               <div className="sidebar-component">
-                <img className="fox" alt="Fox" src="https://c.animaapp.com/RvWIzz1c/img/fox@2x.png" />
+                <img
+                  className="fox"
+                  alt="Fox"
+                  src="https://c.animaapp.com/RvWIzz1c/img/fox@2x.png"
+                />
 
                 <div className="learn-icon">
                   <div className="overlap-group-5">
@@ -238,7 +400,11 @@ export const HomeFr = () => {
 
                 <div className="settings-box">
                   <div className="settings-icon">
-                    <img className="vector-3" alt="Vector" src="https://c.animaapp.com/RvWIzz1c/img/vector-1.svg" />
+                    <img
+                      className="vector-3"
+                      alt="Vector"
+                      src="https://c.animaapp.com/RvWIzz1c/img/vector-1.svg"
+                    />
                   </div>
 
                   <div className="text-wrapper-15">Settings</div>
@@ -249,6 +415,5 @@ export const HomeFr = () => {
         </div>
       </div>
     </div>
-  )
-}
-
+  );
+};
