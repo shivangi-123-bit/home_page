@@ -1,0 +1,1 @@
+export { HomeFr } from "./HomeFr";
